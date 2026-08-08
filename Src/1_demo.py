@@ -10,11 +10,14 @@ from langchain_core.messages import (
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 
-from langchain_ollama import OllamaLLM
+from langchain_ollama import OllamaLLM , ChatOllama
 
 load_dotenv()
 
-llm = OllamaLLM(model="llama3.2")
+llm = ChatOllama(
+    model="llama3.2",
+    temperature=0
+)
 
 
 class ChatState(TypedDict):
@@ -27,11 +30,7 @@ def chat_node(state: ChatState):
 
     response = llm.invoke(messages)
 
-    return {
-        "messages": [
-            AIMessage(content=response)
-        ]
-    }
+    return {"messages": [response]}
 
 
 graph = StateGraph(ChatState)
