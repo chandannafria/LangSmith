@@ -35,4 +35,17 @@ vector_db = Chroma.from_documents(
     embedding=embedding_model,
     persist_directory="vectordb"
 )
-print("vector db successfully")
+# print("vector db successfully")
+
+retriever = vector_db.as_retriever(
+    search_type = "similarity",
+    search_kwargs = {"k":3}
+)
+
+query = "what is lstm"
+
+result = retriever.invoke(query)
+
+for i ,  doc in enumerate(result):
+    print(f"----result---{i+1}")
+    print(doc.page_content)
